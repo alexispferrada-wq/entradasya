@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EntradasYa — Venta de entradas online para tus eventos</title>
+    <meta name="description" content="EntradasYa: plataforma de venta de entradas online para eventos. Crea eventos, vende entradas, gestiona asistentes con códigos QR. Producto de Tusitio Labs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0f1c;
+            --bg2: #0e1626;
+            --card: #131c30;
+            --border: rgba(255,255,255,0.08);
+            --text: #eef2ff;
+            --muted: #94a3b8;
+            --accent: #f43f5e;
+            --accent2: #fb923c;
+            --lime: #a3e635;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body {
+            font-family:'Inter',system-ui,sans-serif;
+            background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden;
+        }
+        h1,h2,h3,h4 { font-family:'Space Grotesk',sans-serif; font-weight:700; }
+        a { text-decoration:none; color:inherit; }
+        .container { max-width:1120px; margin:0 auto; padding:0 24px; }
+
+        /* NAV */
+        .navbar { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(10,15,28,0.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+        .nav-content { display:flex; align-items:center; justify-content:space-between; height:68px; }
+        .logo { font-family:'Space Grotesk'; font-weight:700; font-size:1.25rem; display:flex; align-items:center; gap:8px; }
+        .logo .dot { width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 12px var(--accent); }
+        .nav-links { display:flex; gap:28px; }
+        .nav-links a { color:var(--muted); font-size:0.9rem; font-weight:500; transition:color .2s; }
+        .nav-links a:hover { color:var(--text); }
+        .btn { display:inline-block; padding:10px 20px; border-radius:10px; font-weight:600; font-size:0.9rem; transition:all .2s; cursor:pointer; border:none; }
+        .btn-outline { border:1px solid var(--border); color:var(--text); background:transparent; }
+        .btn-outline:hover { border-color:var(--accent); }
+        .btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(244,63,94,0.3); }
+        .btn-lime { background:var(--lime); color:#1a2e05; }
+        .btn-lime:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(163,230,53,0.25); }
+        .mobile-menu { display:none; background:none; border:none; cursor:pointer; }
+        .mobile-menu span { display:block; width:22px; height:2px; background:var(--text); margin:5px 0; }
+
+        /* HERO */
+        .hero { padding:150px 0 90px; position:relative; text-align:center; }
+        .hero-glow { position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:700px; height:500px; pointer-events:none; background:radial-gradient(ellipse, rgba(244,63,94,0.14), transparent 60%); }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 16px; border-radius:999px; font-size:0.8rem; font-weight:500; background:rgba(244,63,94,0.1); border:1px solid rgba(244,63,94,0.3); color:var(--accent); margin-bottom:24px; }
+        .hero h1 { font-size:3rem; line-height:1.15; max-width:760px; margin:0 auto 20px; }
+        .gradient-text { background:linear-gradient(135deg,var(--accent),var(--accent2),var(--lime)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .hero-subtitle { color:var(--muted); font-size:1.15rem; max-width:620px; margin:0 auto 36px; }
+        .hero-cta { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+        .hero-stats { display:flex; justify-content:center; gap:60px; margin-top:64px; flex-wrap:wrap; }
+        .stat-value { font-family:'Space Grotesk'; font-size:2.2rem; font-weight:700; color:var(--lime); }
+        .stat-label { color:var(--muted); font-size:0.85rem; }
+
+        /* SECTIONS */
+        .section { padding:90px 0; }
+        .section-dark { background:var(--bg2); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+        .section-header { text-align:center; max-width:650px; margin:0 auto 56px; }
+        .section-header h2 { font-size:2.2rem; margin-bottom:12px; }
+        .section-header p { color:var(--muted); }
+
+        /* FEATURES */
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; }
+        .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; transition:all .25s; }
+        .card:hover { transform:translateY(-4px); border-color:rgba(244,63,94,0.4); }
+        .icon { font-size:1.8rem; margin-bottom:16px; }
+        .card h3 { font-size:1.1rem; margin-bottom:8px; }
+        .card p { color:var(--muted); font-size:0.9rem; }
+        .card ul { list-style:none; margin-top:14px; }
+        .card ul li { color:var(--muted); font-size:0.85rem; padding:4px 0; }
+
+        /* HOW IT WORKS */
+        .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; counter-reset:step; }
+        .step-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; position:relative; }
+        .step-number { font-family:'Space Grotesk'; font-size:2rem; font-weight:700; color:var(--accent); opacity:0.7; margin-bottom:12px; }
+        .step-card h3 { font-size:1.05rem; margin-bottom:8px; }
+        .step-card p { color:var(--muted); font-size:0.88rem; }
+
+        /* PRICING */
+        .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; align-items:start; max-width:900px; margin:0 auto; }
+        .pricing-card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:32px; position:relative; transition:all .25s; }
+        .pricing-card.featured { border-color:var(--lime); box-shadow:0 0 40px rgba(163,230,53,0.08); }
+        .pricing-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--lime); color:#1a2e05; font-size:0.75rem; font-weight:700; padding:4px 14px; border-radius:999px; white-space:nowrap; }
+        .price { font-family:'Space Grotesk'; font-size:2.4rem; font-weight:700; color:var(--accent); }
+        .pricing-desc { color:var(--muted); font-size:0.85rem; margin-bottom:20px; }
+        .pricing-features { list-style:none; margin-bottom:24px; }
+        .pricing-features li { padding:6px 0; font-size:0.88rem; }
+        .btn-block { width:100%; text-align:center; }
+
+        /* CTA */
+        .section-cta { text-align:center; }
+        .cta-content h2 { font-size:2.2rem; margin-bottom:12px; }
+        .cta-content p { color:var(--muted); margin-bottom:32px; }
+        .cta-note { margin-top:24px; font-size:0.85rem; color:var(--muted); }
+
+        /* FOOTER */
+        .footer { background:#070b16; border-top:1px solid var(--border); padding:60px 0 30px; }
+        .footer-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:32px; margin-bottom:40px; }
+        .footer-brand p { color:var(--muted); font-size:0.88rem; margin-top:8px; }
+        .footer-links h4 { font-size:0.95rem; margin-bottom:14px; }
+        .footer-links a { display:block; color:var(--muted); font-size:0.88rem; padding:4px 0; transition:color .2s; }
+        .footer-links a:hover { color:var(--accent); }
+        .footer-bottom { border-top:1px solid var(--border); padding-top:24px; text-align:center; color:var(--muted); font-size:0.82rem; }
+
+        /* CHAT */
+        .chat-fab { position:fixed; bottom:24px; right:24px; z-index:200; width:60px; height:60px; border-radius:50%; border:none; cursor:pointer; background:linear-gradient(135deg,#25D366,#128C7E); display:flex; align-items:center; justify-content:center; font-size:1.6rem; box-shadow:0 8px 24px rgba(37,211,102,0.35); transition:transform .2s; }
+        .chat-fab:hover { transform:scale(1.1); }
+        .chat-box { position:fixed; bottom:96px; right:24px; z-index:200; width:360px; max-width:calc(100vw - 32px); background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); display:none; flex-direction:column; }
+        .chat-box.open { display:flex; }
+        .chat-head { padding:16px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-weight:700; font-family:'Space Grotesk'; display:flex; justify-content:space-between; align-items:center; }
+        .chat-head button { background:none; border:none; font-size:1.2rem; cursor:pointer; color:#fff; }
+        .chat-body { height:340px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+        .chat-msg { max-width:80%; padding:10px 14px; border-radius:12px; font-size:0.88rem; line-height:1.5; }
+        .chat-msg.bot { background:rgba(255,255,255,0.06); align-self:flex-start; border-bottom-left-radius:4px; }
+        .chat-msg.user { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; align-self:flex-end; border-bottom-right-radius:4px; font-weight:500; }
+        .chat-input-row { display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); }
+        .chat-input-row input { flex:1; background:rgba(255,255,255,0.06); border:1px solid var(--border); border-radius:10px; padding:10px 14px; color:var(--text); font-size:0.88rem; outline:none; }
+        .chat-input-row input:focus { border-color:var(--accent); }
+        .chat-input-row button { background:var(--lime); color:#1a2e05; border:none; border-radius:10px; padding:0 18px; font-weight:700; cursor:pointer; }
+
+        @media(max-width:768px) {
+            .nav-links { display:none; }
+            .mobile-menu { display:block; }
+            .hero h1 { font-size:2.2rem; }
+            .hero { padding:120px 0 60px; }
+            .hero-stats { gap:30px; }
+            .footer-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo"><span class="dot"></span> EntradasYa</a>
+            <div class="nav-links">
+                <a href="#funciones">Funciones</a>
+                <a href="#como-funciona">Cómo funciona</a>
+                <a href="#planes">Planes</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+            <div class="nav-cta"><a href="#planes" class="btn btn-primary">Comenzar</a></div>
+            <button class="mobile-menu" aria-label="Menú"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-glow"></div>
+        <div class="container">
+            <div class="hero-badge">🎟️ Venta de entradas para tus eventos</div>
+            <h1>Vende entradas online y gestiona asistentes <span class="gradient-text">sin fricción</span></h1>
+            <p class="hero-subtitle">Crea tu evento, comparte el link de venta y recibe a tus asistentes con códigos QR. Todo desde una plataforma simple. Producto de Tusitio Labs.</p>
+            <div class="hero-cta">
+                <a href="#planes" class="btn btn-lime">Ver Planes</a>
+                <a href="#contacto" class="btn btn-outline">Hablar con un Humano</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><div class="stat-value">24/7</div><div class="stat-label">Venta online</div></div>
+                <div class="stat"><div class="stat-value">QR</div><div class="stat-label">Control de acceso</div></div>
+                <div class="stat"><div class="stat-value">1 día</div><div class="stat-label">Evento en línea</div></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="funciones" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Todo lo que necesitas para tu evento</h2>
+                <p>De la creación del evento a la puerta, en un solo lugar</p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="icon">📅</div>
+                    <h3>Crea tu evento</h3>
+                    <p>Nombre, fecha, lugar y aforo en minutos. Configura precios y tipos de entrada.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">🔗</div>
+                    <h3>Comparte el link</h3>
+                    <p>Una URL para vender en redes, WhatsApp y tu web. La venta fluye sola.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📱</div>
+                    <h3>Entradas con QR</h3>
+                    <p>Cada comprador recibe su entrada con código QR único para el control de acceso.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">👥</div>
+                    <h3>Gestión de asistentes</h3>
+                    <p>Lista de asistentes en vivo, escaneo de QR en la puerta y aforo en tiempo real.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">💰</div>
+                    <h3>Pagos integrados</h3>
+                    <p>Cobros online integrados. Tú te enfocas en el evento, nosotros en los pagos.</p>
+                </div>
+                <div class="card">
+                    <div class="icon">📊</div>
+                    <h3>Reportes</h3>
+                    <ul>
+                        <li>Ventas por tipo de entrada</li>
+                        <li>Asistentes esperados vs confirmados</li>
+                        <li>Ingresos en tiempo real</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Cómo funciona?</h2>
+                <p>De la idea a la venta en menos de un día</p>
+            </div>
+            <div class="steps">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <h3>Registra tu evento</h3>
+                    <p>Crea el evento, define fechas, precios y aforo.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <h3>Comparte el link</h3>
+                    <p>Publica tu URL de venta en redes, WhatsApp y web.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <h3>Vende 24/7</h3>
+                    <p>Los asistentes compran y reciben su entrada con QR.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">04</div>
+                    <h3>Controla la puerta</h3>
+                    <p>Escanea QR, valida acceso y gestiona el aforo en vivo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="planes" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Planes simples</h2>
+                <p>Empieza con un costo único de setup y vende sin mensualidad en tu primer evento</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3 style="font-size:1.3rem">Por Evento</h3>
+                    <p class="pricing-desc">Ideal para eventos puntuales</p>
+                    <div class="price">$30.000</div>
+                    <p style="color:var(--muted);font-size:0.9rem;margin:8px 0 20px">por evento</p>
+                    <ul class="pricing-features">
+                        <li>✅ Venta online 24/7</li>
+                        <li>✅ Entradas con código QR</li>
+                        <li>✅ Gestión de asistentes</li>
+                        <li>✅ Aforo configurable</li>
+                        <li>✅ Reportes de venta</li>
+                        <li>✅ Escaneo en puerta</li>
+                    </ul>
+                    <a href="#contacto" class="btn btn-outline btn-block">Crear mi evento</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">Próximamente</div>
+                    <h3 style="font-size:1.3rem">Suscripción</h3>
+                    <p class="pricing-desc">Para organizadores con eventos frecuentes</p>
+                    <div class="price">Pronto</div>
+                    <p style="color:var(--muted);font-size:0.9rem;margin:8px 0 20px">planes mensuales</p>
+                    <ul class="pricing-features">
+                        <li>✅ Eventos ilimitados</li>
+                        <li>✅ Marca personalizada</li>
+                        <li>✅ Integraciones avanzadas</li>
+                        <li class="disabled">❌ Disponible próximamente</li>
+                    </ul>
+                    <a href="#contacto" class="btn btn-lime btn-block">Notificarme</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto" class="section section-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¿Tienes un evento próximo?</h2>
+                <p>Cuéntanos de tu evento y te ayudamos a tener la venta en línea hoy.</p>
+                <div class="cta-buttons" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+                    <a href="https://wa.me/56991261916" target="_blank" class="btn btn-lime">WhatsApp</a>
+                    <a href="mailto:alexispferrada@gmail.com" class="btn btn-outline">Escribir</a>
+                </div>
+                <p class="cta-note">📧 alexispferrada@gmail.com · 📞 +56 9 9126 1916</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>🎟️ EntradasYa</h3>
+                    <p>Plataforma de venta de entradas online. Un producto de Tusitio Labs.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Producto</h4>
+                    <a href="#funciones">Funciones</a>
+                    <a href="#planes">Planes</a>
+                    <a href="#contacto">Contacto</a>
+                </div>
+                <div class="footer-links">
+                    <h4>Tusitio Labs</h4>
+                    <a href="https://tusitioya.cl">Web principal</a>
+                    <a href="https://trackai.tusitioya.cl">TrackAI</a>
+                    <a href="https://turbopos.cl">TurboPOS</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 EntradasYa · Tusitio Labs · Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CHAT: Agente EntradasYa (scope entradasya) -->
+    <button class="chat-fab" onclick="toggleChat()" aria-label="Chat con asistente">🎟️</button>
+    <div class="chat-box" id="chatBox">
+        <div class="chat-head">
+            <span>EntradasYa · Asistente</span>
+            <button onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="chat-msg bot">¡Hola! 👋 Soy el asistente de EntradasYa. Pregúntame por planes, precios o cómo vender entradas para tu evento.</div>
+        </div>
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Escribe tu pregunta..." onkeypress="if(event.key==='Enter')sendChat()">
+            <button onclick="sendChat()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const RUCIO_URL = 'https://rucio.alexispferrada.workers.dev';
+        // tracking
+        (function() {
+            let sessionId = localStorage.getItem('ey_session_id');
+            if (!sessionId) {
+                sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('ey_session_id', sessionId);
+            }
+            try {
+                navigator.sendBeacon(RUCIO_URL + '/api/memory/event', JSON.stringify({
+                    event_type: 'page_view', scope: 'entradasya', session_id: sessionId,
+                    payload: { page: 'EntradasYa', path: location.pathname, referrer: document.referrer || '' }
+                }));
+            } catch (e) {}
+        })();
+        // chat
+        function toggleChat() {
+            const box = document.getElementById('chatBox');
+            box.classList.toggle('open');
+            if (box.classList.contains('open')) document.getElementById('chatInput').focus();
+        }
+        function addMsg(text, who) {
+            const body = document.getElementById('chatBody');
+            const d = document.createElement('div');
+            d.className = 'chat-msg ' + who;
+            d.textContent = text;
+            body.appendChild(d);
+            body.scrollTop = body.scrollHeight;
+        }
+        async function sendChat() {
+            const input = document.getElementById('chatInput');
+            const q = input.value.trim();
+            if (!q) return;
+            addMsg(q, 'user');
+            input.value = '';
+            const typing = document.createElement('div');
+            typing.className = 'chat-msg bot'; typing.textContent = '…';
+            document.getElementById('chatBody').appendChild(typing);
+            try {
+                const res = await fetch(RUCIO_URL + '/api/agent/ask', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ scope: 'entradasya', question: q, session_id: 'entradasya_' + Date.now() })
+                });
+                const data = await res.json();
+                typing.remove();
+                addMsg(data.answer || 'No pude responder. Intenta de nuevo.', 'bot');
+            } catch (e) {
+                typing.remove();
+                addMsg('Hubo un problema de conexión. Intenta de nuevo.', 'bot');
+            }
+        }
+    </script>
+</body>
+</html>
